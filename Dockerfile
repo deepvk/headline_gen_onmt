@@ -1,7 +1,6 @@
 FROM pytorch/pytorch:1.0-cuda10.0-cudnn7-runtime
-#FROM pytorch/pytorch:latest
 
-RUN pip --proxy http://10.15.132.21:3128  install \
+RUN pip install \
 certifi==2018.10.15 \
 chardet==3.0.4 \
 ConfigArgParse==0.14.0 \
@@ -18,17 +17,15 @@ tqdm==4.28.1 \
 ujson==1.35 \
 urllib3==1.24
 
-ENV https_proxy http://10.15.132.21:3128
 RUN python -m nltk.downloader punkt
 
 WORKDIR /
-RUN git clone https://github.com/OpenNMT/OpenNMT-py.git && cd OpenNMT-py && pip --proxy http://10.15.132.21:3128 install -r requirements.txt && python setup.py install
+RUN git clone https://github.com/OpenNMT/OpenNMT-py.git && cd OpenNMT-py && pip install -r requirements.txt && python setup.py install
 
 WORKDIR /
 
 COPY *bpe.py ./
 COPY run.sh .
 COPY ria* ./
-#COPY small_input.txt ./input.txt
 
 ENTRYPOINT ["bash", "run.sh"] 
